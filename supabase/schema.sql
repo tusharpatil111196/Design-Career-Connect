@@ -142,6 +142,27 @@ on public.jobs for all to authenticated
 using ((select public.is_admin()))
 with check ((select public.is_admin()));
 
+create or replace view public.jobs_with_clients
+with (security_invoker = false)
+as
+select
+  jobs.id,
+  jobs.client_id,
+  jobs.title,
+  jobs.location,
+  jobs.employment_type,
+  jobs.salary,
+  jobs.category,
+  jobs.description,
+  jobs.status,
+  jobs.created_at,
+  clients.name as company
+from public.jobs
+join public.clients on clients.id = jobs.client_id
+where jobs.status = 'Open' or (select public.is_admin());
+
+grant select on public.jobs_with_clients to authenticated;
+
 drop policy if exists "Candidates read own applications; admins read all" on public.applications;
 create policy "Candidates read own applications; admins read all"
 on public.applications for select to authenticated
