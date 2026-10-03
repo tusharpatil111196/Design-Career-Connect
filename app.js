@@ -261,7 +261,7 @@
 
   function studentsView() {
     const students = state.students.filter(item => `${item.full_name} ${item.email} ${item.skills} ${item.qualification}`.toLowerCase().includes(state.query.toLowerCase()));
-    return `<div class="page"><div class="page-heading"><div><div class="eyebrow">Talent network</div><h1>Candidates</h1><p class="subhead">Candidate profiles and portal accounts.</p></div><div class="heading-actions"><button class="btn btn-primary" data-open="student">＋ Add candidate</button></div></div><div class="toolbar"><div class="search"><input class="field" data-search placeholder="Search candidates, skills or qualifications" value="${esc(state.query)}"></div><span class="date-label">${students.length} candidates</span></div><div class="content-panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Candidate</th><th>Qualification</th><th>Experience</th><th>Skills</th><th>Applications</th><th></th></tr></thead><tbody>${students.map(student => `<tr><td><span class="table-primary">${esc(student.full_name)}</span><span class="table-secondary">${esc(student.email)}</span></td><td>${esc(student.qualification || '—')}</td><td>${esc(student.experience || '—')}</td><td>${esc(student.skills || '—')}</td><td>${state.applications.filter(item=>item.student_id===student.id).length}</td><td><button class="btn btn-light btn-sm" data-edit="student:${student.id}">View profile</button></td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">No candidates found.</div></td></tr>'}</tbody></table></div></div></div>`;
+    return `<div class="page"><div class="page-heading"><div><div class="eyebrow">Talent network</div><h1>Candidates</h1><p class="subhead">Candidate profiles and portal accounts.</p></div><div class="heading-actions"><button class="btn btn-light" data-refresh-candidates>↻ Refresh</button><button class="btn btn-primary" data-open="student">＋ Add candidate</button></div></div><div class="toolbar"><div class="search"><input class="field" data-search placeholder="Search candidates, skills or qualifications" value="${esc(state.query)}"></div><span class="date-label">${students.length} candidates</span></div><div class="content-panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Candidate</th><th>Qualification</th><th>Experience</th><th>Skills</th><th>Applications</th><th></th></tr></thead><tbody>${students.map(student => `<tr><td><span class="table-primary">${esc(student.full_name)}</span><span class="table-secondary">${esc(student.email)}</span></td><td>${esc(student.qualification || '—')}</td><td>${esc(student.experience || '—')}</td><td>${esc(student.skills || '—')}</td><td>${state.applications.filter(item=>item.student_id===student.id).length}</td><td><button class="btn btn-light btn-sm" data-view-candidate="${student.id}">View profile</button></td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">No candidates found.</div></td></tr>'}</tbody></table></div></div></div>`;
   }
 
   function applicationsView() {
@@ -294,10 +294,12 @@
   }
 
   function bindPageEvents() {
-    app.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {state.view=button.dataset.view;state.query='';state.status='All statuses';render()}));
+    app.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', async () => {state.view=button.dataset.view;state.query='';state.status='All statuses';if(isAdmin())try{await loadData()}catch(error){toast(`Could not refresh portal data: ${error.message}`)}render()}));
     app.querySelectorAll('[data-logout]').forEach(button => button.addEventListener('click', signOut));
     app.querySelectorAll('[data-open]').forEach(button => button.addEventListener('click', () => openModal(button.dataset.open)));
     app.querySelectorAll('[data-edit]').forEach(button => button.addEventListener('click', () => {const [type,id]=button.dataset.edit.split(':');openModal(type,id)}));
+    app.querySelectorAll('[data-view-candidate]').forEach(button => button.addEventListener('click', () => showCandidateProfile(button.dataset.viewCandidate)));
+    app.querySelector('[data-refresh-candidates]')?.addEventListener('click', async event => {const button=event.currentTarget;button.disabled=true;try{await loadData();render();toast('Candidate list refreshed.')}catch(error){button.disabled=false;toast(`Could not refresh candidates: ${error.message}`)}});
     app.querySelectorAll('[data-apply]').forEach(button => button.addEventListener('click', () => applyForJob(button.dataset.apply)));
     app.querySelector('[data-search]')?.addEventListener('input', event => {state.query=event.target.value;const cursor=event.target.selectionStart;render();const next=app.querySelector('[data-search]');next?.focus();next?.setSelectionRange(cursor,cursor)});
     app.querySelector('[data-status]')?.addEventListener('change', event => {state.status=event.target.value;render()});
@@ -310,6 +312,17 @@
     state.profile=null;
     state.view='dashboard';
     render();
+  }
+
+  function showCandidateProfile(studentId) {
+    const profile=state.students.find(item=>item.id===studentId);
+    if(!profile){toast('Candidate profile not found. Refresh the list and try again.');return}
+    const resumeUrl=/^https?:\/\//i.test(profile.resume_url||'')?`<a href="${esc(profile.resume_url)}" target="_blank" rel="noopener noreferrer">Open resume ↗</a>`:'Not provided';
+    const detail=(label,value,size='')=>`<div class="form-field ${size}"><label>${label}</label><div>${esc(value||'—')}</div></div>`;
+    document.body.insertAdjacentHTML('beforeend',`<div class="modal-backdrop" data-candidate-backdrop><section class="modal" role="dialog" aria-modal="true" aria-labelledby="candidate-title"><div class="modal-head"><div><h2 id="candidate-title">${esc(profile.full_name||'Candidate profile')}</h2><p>${esc(profile.email)}</p></div><button class="modal-close" data-close-candidate aria-label="Close dialog">×</button></div><div class="modal-body"><div class="form-grid">${detail('Phone',profile.phone)}${detail('Location',profile.location)}${detail('Qualification',profile.qualification)}${detail('Experience',profile.experience)}${detail('Skills',profile.skills,'full')}${detail('About',profile.about,'full')}<div class="form-field full"><label>Resume</label><div>${resumeUrl}</div></div></div></div><div class="modal-foot"><button class="btn btn-light" data-close-candidate>Close</button></div></section></div>`);
+    const backdrop=document.querySelector('[data-candidate-backdrop]');
+    backdrop.querySelectorAll('[data-close-candidate]').forEach(button=>button.addEventListener('click',()=>backdrop.remove()));
+    backdrop.addEventListener('click',event=>{if(event.target===backdrop)backdrop.remove()});
   }
 
   function field(label,name,value,type='text',size='',placeholder='') {
