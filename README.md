@@ -4,7 +4,7 @@
 
 A self-contained recruitment agency website with separate admin and student portals. Open `index.html` directly in a browser; no build step or dependencies are required.
 
-Sign in with accounts created in Supabase Authentication. The first admin account must be promoted using the SQL below.
+Students can register from the Student login screen or sign in with an existing Supabase Auth account. Admins are created manually in Supabase and must be promoted using the SQL below.
 
 ### Included workflows
 
@@ -18,8 +18,9 @@ Sign in with accounts created in Supabase Authentication. The first admin accoun
 
 1. Open the Supabase project's **SQL Editor**.
 2. Run (or rerun) the SQL in `supabase/schema.sql` to create the tables, policies, storage bucket, and jobs view.
-3. Create an account under **Authentication → Users**. The trigger creates its `profiles` row automatically with the `student` role.
-4. To make a trusted account an admin, run this in SQL Editor, replacing the email:
+3. In **Authentication → URL Configuration**, set the Site URL to `https://tusharpatil111196.github.io/Design-Career-Connect/` and add that URL to the Redirect URLs list for email confirmation.
+4. Register a student in the website, or create your initial admin account under **Authentication → Users**. The trigger creates a `profiles` row with the `student` role.
+5. To make the trusted initial account an admin, run this in SQL Editor, replacing the email:
 
 	```sql
 	update public.profiles

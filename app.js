@@ -14,7 +14,8 @@
     view: 'dashboard',
     query: '',
     status: 'All statuses',
-    roleChoice: 'student'
+    roleChoice: 'student',
+    authMode: 'login'
   };
   const app = document.getElementById('app');
   const logo = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M6 5h8a11 11 0 0 1 0 22H6V5Z" stroke="currentColor" stroke-width="2.6"/><path d="M27 10h-4a6 6 0 0 0 0 12h4M18 16h8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
@@ -78,34 +79,123 @@
     app.innerHTML = `<main class="login-shell"><section class="login-story"><div class="login-brand"><span class="brand-mark">${logo}</span><strong>Design Career Connect</strong></div><div class="story-copy"><div class="eyebrow">A people-first talent partner</div><h1>Good work starts with a <em>good match.</em></h1><p>Connecting thoughtful people with teams doing meaningful work. Your next chapter starts here.</p></div><div class="story-foot">© 2026 Design Career Connect · New York · Everywhere</div></section><section class="login-panel"><form class="login-box" id="login-form"><div class="eyebrow">Welcome back</div><h2 id="login-heading">Student login</h2><p>Choose your portal, then sign in with your account.</p><div class="demo-box"><span>Choose your portal</span><div class="demo-actions"><button class="${state.roleChoice === 'admin' ? 'selected' : ''}" type="button" data-role="admin"><span class="portal-choice-icon" aria-hidden="true">▦</span><span class="portal-choice-copy"><b>Admin login</b><small>Manage clients, jobs and candidates</small></span><span class="portal-choice-arrow" aria-hidden="true">→</span></button><button class="${state.roleChoice === 'student' ? 'selected' : ''}" type="button" data-role="student"><span class="portal-choice-icon" aria-hidden="true">♙</span><span class="portal-choice-copy"><b>Student login</b><small>Explore jobs and applications</small></span><span class="portal-choice-arrow" aria-hidden="true">→</span></button></div></div><div class="form-field"><label for="login-email">Email address</label><input class="field" id="login-email" type="email" autocomplete="username" required placeholder="you@example.com"></div><div class="form-field"><label for="login-password">Password</label><input class="field" id="login-password" type="password" autocomplete="current-password" required placeholder="Enter your password"></div><div class="login-error" id="form-error" role="alert"></div><button class="btn btn-primary login-submit" type="submit">Sign in <span aria-hidden="true">→</span></button><div class="login-note">Sign-in is secured by Supabase. Ask your agency admin for an account.</div></form></section></main>`;
     app.querySelectorAll('[data-role]').forEach(button => button.addEventListener('click', () => {
       state.roleChoice = button.dataset.role;
+      if (state.roleChoice === 'admin') state.authMode = 'login';
       app.querySelectorAll('[data-role]').forEach(option => option.classList.toggle('selected', option === button));
-      document.getElementById('login-heading').textContent = state.roleChoice === 'admin' ? 'Admin login' : 'Student login';
+      updateAuthMode();
     }));
-    document.getElementById('login-form').addEventListener('submit', signIn);
+    document.getElementById('login-form').addEventListener('submit', authenticate);
+    enableStudentRegistration();
   }
 
-  async function signIn(event) {
+  function enableStudentRegistration() {
+    const form = document.getElementById('login-form');
+    const emailField = document.getElementById('login-email').closest('.form-field');
+    const error = document.getElementById('form-error');
+    const submit = form.querySelector('[type="submit"]');
+    const nameField = document.createElement('div');
+    nameField.className = 'form-field';
+    nameField.innerHTML = '<label for="register-name">Full name</label><input class="field" id="register-name" name="full_name" autocomplete="name" placeholder="Your full name">';
+    form.insertBefore(nameField, emailField);
+    const confirmField = document.createElement('div');
+    confirmField.className = 'form-field';
+    confirmField.innerHTML = '<label for="register-password-confirm">Confirm password</label><input class="field" id="register-password-confirm" type="password" autocomplete="new-password" placeholder="Enter your password again">';
+    form.insertBefore(confirmField, error);
+    const switcher = document.createElement('div');
+    switcher.className = 'auth-switch';
+    switcher.innerHTML = '<span></span><button type="button" class="text-link" data-auth-toggle></button>';
+    submit.after(switcher);
+    switcher.querySelector('[data-auth-toggle]').addEventListener('click', () => {
+      state.authMode = state.authMode === 'login' ? 'register' : 'login';
+      updateAuthMode();
+    });
+    updateAuthMode();
+  }
+
+  function updateAuthMode() {
+    const registering = state.roleChoice === 'student' && state.authMode === 'register';
+    const student = state.roleChoice === 'student';
+    const nameField = document.getElementById('register-name')?.closest('.form-field');
+    const confirmField = document.getElementById('register-password-confirm')?.closest('.form-field');
+    const nameInput = document.getElementById('register-name');
+    const password = document.getElementById('login-password');
+    const toggle = document.querySelector('[data-auth-toggle]');
+    const switcher = toggle?.parentElement;
+    const error = document.getElementById('form-error');
+    nameField.hidden = !registering;
+    confirmField.hidden = !registering;
+    nameInput.required = registering;
+    password.autocomplete = registering ? 'new-password' : 'current-password';
+    password.minLength = registering ? 8 : 0;
+    document.getElementById('register-password-confirm').required = registering;
+    document.getElementById('login-heading').textContent = state.roleChoice === 'admin' ? 'Admin login' : registering ? 'Create student account' : 'Student login';
+    document.querySelector('#login-form > p').textContent = registering ? 'Create an account to apply for roles and track your applications.' : 'Choose your portal, then sign in with your account.';
+    document.querySelector('#login-form .login-submit').innerHTML = registering ? 'Create account <span aria-hidden="true">→</span>' : 'Sign in <span aria-hidden="true">→</span>';
+    switcher.hidden = !student;
+    switcher.querySelector('span').textContent = registering ? 'Already registered?' : 'New to Design Career Connect?';
+    toggle.textContent = registering ? 'Sign in' : 'Register';
+    error.textContent = '';
+  }
+
+  async function authenticate(event) {
     event.preventDefault();
     const button = event.currentTarget.querySelector('[type="submit"]');
     button.disabled = true;
-    button.textContent = 'Signing in…';
+    button.textContent = state.authMode === 'register' ? 'Creating account…' : 'Signing in…';
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
+    if (state.authMode === 'register') {
+      const fullName = document.getElementById('register-name').value.trim();
+      const confirmation = document.getElementById('register-password-confirm').value;
+      if (password !== confirmation) {
+        button.disabled = false;
+        updateAuthMode();
+        showError('The passwords do not match.');
+        return;
+      }
+      const {data, error} = await client.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {full_name: fullName},
+          emailRedirectTo: `${window.location.origin}${window.location.pathname}`
+        }
+      });
+      if (error) {
+        button.disabled = false;
+        updateAuthMode();
+        showError(error.message);
+        return;
+      }
+      if (!data.session) {
+        state.authMode = 'login';
+        button.disabled = false;
+        updateAuthMode();
+        showError('Account created. Check your email to confirm it, then sign in here.');
+        return;
+      }
+      await completeSignIn(data.session, 'student');
+      return;
+    }
     const {data, error} = await client.auth.signInWithPassword({email, password});
     if (error) {
       button.disabled = false;
-      button.innerHTML = 'Sign in <span aria-hidden="true">→</span>';
+      updateAuthMode();
       showError(error.message);
       return;
     }
-    state.session = data.session;
-    const {data:profile, error:profileError} = await client.from('profiles').select('*').eq('id', data.user.id).single();
-    if (profileError || profile.role !== state.roleChoice) {
+    await completeSignIn(data.session, state.roleChoice);
+  }
+
+  async function completeSignIn(session, expectedRole) {
+    state.session = session;
+    const {data:profile, error:profileError} = await client.from('profiles').select('*').eq('id', session.user.id).single();
+    if (profileError || profile.role !== expectedRole) {
       await client.auth.signOut();
       state.session = null;
-      button.disabled = false;
-      button.innerHTML = 'Sign in <span aria-hidden="true">→</span>';
-      showError(profileError?.message || `This account is not registered for the ${state.roleChoice} portal.`);
+      const button = document.querySelector('#login-form .login-submit');
+      if (button) button.disabled = false;
+      updateAuthMode();
+      showError(profileError?.message || `This account is not registered for the ${expectedRole} portal.`);
       return;
     }
     state.profile = profile;
