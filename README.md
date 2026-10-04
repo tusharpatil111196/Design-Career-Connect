@@ -1,6 +1,6 @@
-# Design-Career-Connect
+# Core Career Connect
 
-## Design Career Connect recruitment portal
+## Core Career Connect recruitment portal
 
 A self-contained recruitment agency website with separate admin and student portals. Open `index.html` directly in a browser; no build step or dependencies are required.
 

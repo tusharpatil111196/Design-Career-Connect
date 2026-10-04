@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T09:48:47.390803+00:00",
+  "title": "Design System: Core Career Connect",
+  "extensions": {
+    "colorMeta": {
+      "green": {
+        "role": "primary",
+        "displayName": "Portal Green",
+        "canonical": "#1d674b",
+        "tonalRamp": [
+          "#113c2b",
+          "#1c6348",
+          "#278b65",
+          "#32b382",
+          "#60d2a7",
+          "#9ce3c8",
+          "#cff2e5",
+          "#ebf9f4"
+        ]
+      },
+      "forest": {
+        "role": "primary",
+        "displayName": "Forest",
+        "canonical": "#173c31",
+        "tonalRamp": [
+          "#15372d",
+          "#235c4b",
+          "#318169",
+          "#40a687",
+          "#6cc6ab",
+          "#a3dccb",
+          "#d3eee6",
+          "#edf8f5"
+        ]
+      },
+      "lime": {
+        "role": "secondary",
+        "displayName": "Signal Lime",
+        "canonical": "#d5f36a",
+        "tonalRamp": [
+          "#394706",
+          "#5e760a",
+          "#84a50d",
+          "#aad411",
+          "#caf042",
+          "#def589",
+          "#effac6",
+          "#f8fde7"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#17221e",
+        "tonalRamp": [
+          "#1f2e28",
+          "#334c43",
+          "#486a5e",
+          "#5d8979",
+          "#85ad9e",
+          "#b3ccc3",
+          "#dae6e2",
+          "#f0f5f3"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#f5f7f3",
+        "tonalRamp": [
+          "#262e1f",
+          "#404d33",
+          "#596b47",
+          "#738a5c",
+          "#99ad85",
+          "#bfccb2",
+          "#e0e7da",
+          "#f2f5f0"
+        ]
+      },
+      "tint": {
+        "role": "neutral",
+        "displayName": "Tint",
+        "canonical": "#eff6eb",
+        "tonalRamp": [
+          "#223518",
+          "#395828",
+          "#507b37",
+          "#679e47",
+          "#8ec072",
+          "#b9d7a7",
+          "#ddecd5",
+          "#f1f7ed"
+        ]
+      },
+      "warn": {
+        "role": "status",
+        "displayName": "Amber Warn",
+        "canonical": "#8a5a0f",
+        "tonalRamp": [
+          "#452d08",
+          "#734b0d",
+          "#a16912",
+          "#cf8717",
+          "#ebab47",
+          "#f2cb8c",
+          "#f9e6c8",
+          "#fdf4e8"
+        ]
+      },
+      "info": {
+        "role": "status",
+        "displayName": "Steel Info",
+        "canonical": "#3d6a90",
+        "tonalRamp": [
+          "#172836",
+          "#26425a",
+          "#355c7d",
+          "#4477a1",
+          "#709cc2",
+          "#a5c1d9",
+          "#d4e1ed",
+          "#edf3f7"
+        ]
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Brick Danger",
+        "canonical": "#a84d40",
+        "tonalRamp": [
+          "#371915",
+          "#5c2a23",
+          "#813b31",
+          "#a64c3f",
+          "#c7776b",
+          "#dcaaa3",
+          "#eed6d3",
+          "#f8eeed"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Login story headline."
+      },
+      "headline": {
+        "displayName": "Page title",
+        "purpose": "h1 per page, 28px."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel, job and modal titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default 14px copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons, form labels, pills at 12px."
+      },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "11px uppercase kickers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow",
+        "value": "0 18px 52px #18332912",
+        "purpose": "Toast."
+      },
+      {
+        "name": "card-hover-shadow",
+        "value": "0 12px 26px #1b58310a",
+        "purpose": "Job card hover."
+      },
+      {
+        "name": "modal-shadow",
+        "value": "0 30px 100px #0003",
+        "purpose": "Modal."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px #3a87531a",
+        "purpose": "Field focus halo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "fast",
+        "value": ".16s",
+        "purpose": "Button hover nudge."
+      },
+      {
+        "name": "base",
+        "value": ".18s-.2s",
+        "purpose": "Nav and card transitions, modal rise."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "lg",
+        "value": "1050px"
+      },
+      {
+        "name": "md",
+        "value": "740px"
+      },
+      {
+        "name": "sm",
+        "value": "470px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action; green fill, deepens on hover.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Save changes</button>",
+      "css": ".ds-btn{border:1px solid transparent;border-radius:8px;padding:10px 14px;display:inline-flex;align-items:center;gap:8px;font:700 12px \"DM Sans\",sans-serif;cursor:pointer;transition:transform .16s,background .16s}.ds-btn:hover{transform:translateY(-1px)}.ds-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.ds-btn-primary{background:var(--green);color:var(--surface)}.ds-btn-primary:hover{background:var(--green-dark)}"
+    },
+    {
+      "name": "Light Button",
+      "kind": "button",
+      "refersTo": "button-light",
+      "description": "Secondary action on white.",
+      "html": "<button class=\"ds-btn ds-btn-light\">Cancel</button>",
+      "css": ".ds-btn{border:1px solid transparent;border-radius:8px;padding:10px 14px;display:inline-flex;align-items:center;gap:8px;font:700 12px \"DM Sans\",sans-serif;cursor:pointer;transition:transform .16s,background .16s}.ds-btn:hover{transform:translateY(-1px)}.ds-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.ds-btn-light{background:var(--surface);border-color:var(--line);color:var(--ink-2)}"
+    },
+    {
+      "name": "Lime Button",
+      "kind": "button",
+      "refersTo": "button-lime",
+      "description": "Rare highlighted action.",
+      "html": "<button class=\"ds-btn ds-btn-lime\">Apply now</button>",
+      "css": ".ds-btn{border:1px solid transparent;border-radius:8px;padding:10px 14px;display:inline-flex;align-items:center;gap:8px;font:700 12px \"DM Sans\",sans-serif;cursor:pointer;transition:transform .16s,background .16s}.ds-btn:hover{transform:translateY(-1px)}.ds-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.ds-btn-lime{background:var(--lime);color:var(--lime-ink)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Input with green focus ring and halo.",
+      "html": "<input class=\"ds-field\" placeholder=\"you@example.com\">",
+      "css": ".ds-field{width:260px;border:1px solid var(--line-strong);border-radius:7px;background:var(--surface);color:var(--ink);padding:10px 11px;font:12px \"DM Sans\",sans-serif}.ds-field:focus{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--focus-halo)}.ds-field:focus-visible{outline:3px solid var(--focus);outline-offset:1px}"
+    },
+    {
+      "name": "Status Pills",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "Dot + label in fg/bg pairs: New, In review, Interview, Rejected, Closed.",
+      "html": "<span class=\"ds-s\">New</span> <span class=\"ds-s ds-r\">In review</span> <span class=\"ds-s ds-i\">Interview</span> <span class=\"ds-s ds-x\">Rejected</span> <span class=\"ds-s ds-c\">Closed</span>",
+      "css": ".ds-s{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:20px;font:700 12px \"DM Sans\",sans-serif;background:var(--success-bg);color:var(--success)}.ds-s:before{content:\"\";width:5px;height:5px;border-radius:50%;background:currentColor}.ds-r{background:var(--warn-bg);color:var(--warn)}.ds-i{background:var(--info-bg);color:var(--info)}.ds-x{background:var(--danger-bg);color:var(--red)}.ds-c{background:var(--sunken);color:var(--muted)}"
+    },
+    {
+      "name": "Job Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Bordered white card; lifts and gains a green border on hover.",
+      "html": "<article class=\"ds-card\"><h3>Design Engineer, Thermal</h3><p>Pune - Full time</p><span class=\"ds-tag\">Mechanical</span></article>",
+      "css": ".ds-card{width:280px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:18px;font-family:\"DM Sans\",sans-serif;transition:.2s}.ds-card:hover{border-color:var(--accent-line-soft);box-shadow:var(--card-hover-shadow);transform:translateY(-2px)}.ds-card h3{font:700 14px Manrope,sans-serif;margin:0 0 5px}.ds-card p{font-size:12px;color:var(--muted);margin:0 0 12px}.ds-tag{background:var(--sunken);color:var(--text-3);padding:5px 8px;border-radius:5px;font-size:12px}"
+    },
+    {
+      "name": "Sidebar Nav Item",
+      "kind": "nav",
+      "refersTo": "sidebar",
+      "description": "Dark rail item; active has lime inset edge.",
+      "html": "<div class=\"ds-nav\"><button>Dashboard</button><button class=\"active\">Vacancies</button></div>",
+      "css": ".ds-nav{background:var(--forest);padding:18px;width:200px;display:grid;gap:5px}.ds-nav button{border:0;background:transparent;color:var(--on-dark-2);padding:11px 12px;border-radius:8px;text-align:left;font:600 14px \"DM Sans\",sans-serif;cursor:pointer;transition:.18s}.ds-nav button:hover,.ds-nav button.active{background:var(--on-dark-hover);color:#fff}.ds-nav button.active{box-shadow:inset 3px 0 var(--lime)}.ds-nav button:focus-visible{outline:3px solid var(--focus-dark);outline-offset:-3px}"
+    },
+    {
+      "name": "Metric Card",
+      "kind": "card",
+      "refersTo": "metric-card",
+      "description": "Label, icon chip and Manrope number.",
+      "html": "<div class=\"ds-m\"><div class=\"ds-mt\"><span>Open vacancies</span><i>#</i></div><div class=\"ds-mv\">24</div><div class=\"ds-mn\">3 new this week</div></div>",
+      "css": ".ds-m{width:220px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:17px 18px;font-family:\"DM Sans\",sans-serif}.ds-mt{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:600}.ds-mt i{width:30px;height:30px;border-radius:9px;background:var(--tint);color:var(--green);display:grid;place-items:center;font-style:normal}.ds-mv{font:800 27px Manrope,sans-serif;margin:13px 0 3px}.ds-mn{font-size:12px;color:var(--muted)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Placement Desk",
+    "overview": "A recruitment portal that behaves like a well-run agency desk: calm, legible, organised around status. Forest green anchors identity; green-tinted paper, hairline borders and dark ink carry the rest; lime is a rare signal.",
+    "keyCharacteristics": [
+      "Forest green + lime with green-tinted neutrals",
+      "Flat bordered surfaces; shadow only for hover, modal, toast",
+      "Status as colour pill + dot + text",
+      "Manrope headings, DM Sans body",
+      "3px focus ring, 44px coarse-pointer targets, 12px floor, 4.5:1 contrast"
+    ],
+    "rules": [
+      {
+        "name": "The One Lime Rule",
+        "body": "Lime appears once or twice per screen as a signal, never as a fill for large content areas (the login circle is the single decorative exception).",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted Neutral Rule",
+        "body": "Every neutral carries a slight green cast; no cool or pure grays, no new near-duplicate tints.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token-Only Rule",
+        "body": "Rules reference var(--token); a new colour needs a named token with a role.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Voice Rule",
+        "body": "Manrope for things you scan, DM Sans for things you read.",
+        "section": "typography"
+      },
+      {
+        "name": "The 12px Floor Rule",
+        "body": "No running text below 12px; only uppercase tracked kickers may use 11px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces carry borders, not shadows, at rest; shadows appear only for hover lift, overlays, and focus.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Use var(--token) for every colour",
+      "Pair every status with its fg/bg tokens and a text label",
+      "Keep body text at 12px+ and 4.5:1 contrast",
+      "Keep the 3px focus ring on every interactive element",
+      "Give touch targets at least 44px on coarse pointers and at 740px or narrower",
+      "Honour prefers-reduced-motion"
+    ],
+    "donts": [
+      "Add dark mode or cool grays",
+      "Use lime as a large fill or as text on light backgrounds",
+      "Convey status by colour alone",
+      "Add shadows to resting cards",
+      "Mix Manrope and DM Sans in a text run",
+      "Introduce new radii or near-duplicate tints"
+    ]
+  }
+}
